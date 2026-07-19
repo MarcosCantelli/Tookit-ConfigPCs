@@ -1,76 +1,55 @@
 #!/usr/bin/env bash
-# software.sh - instalação de programas básicos usando SOMENTE repositórios oficiais:
-# repositório da própria distro, repositório oficial da Google (Chrome) e, no Fedora,
-# RPM Fusion (repositório recomendado pelo próprio projeto Fedora para pacotes como VLC
-# que não podem ir no repositório principal por causa de patente/licença de codec).
+# software.sh - Docker (repositório oficial docker.com) e ferramentas básicas de servidor
+# (repositório oficial da própria distro). Sem nada gráfico - o foco aqui é servidor
+# (Ubuntu Server / Oracle Linux), não estação de trabalho.
 
-ensure_rpmfusion() {
-    if [ "$PKG_MANAGER" != "dnf" ]; then return; fi
-
-    if ! dnf repolist 2>/dev/null | grep -qi rpmfusion-free; then
-        log "Habilitando RPM Fusion (free) - repositório recomendado pelo projeto Fedora para VLC/codecs..." "WARN"
-        dnf install -y "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+install_docker() {
+    if command -v docker >/dev/null 2>&1; then
+        log "Docker já está instalado."
+        return
     fi
-    if ! dnf repolist 2>/dev/null | grep -qi rpmfusion-nonfree; then
-        dnf install -y "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
-    fi
-}
 
-install_google_chrome() {
-    log "Instalando Google Chrome..."
+    log "Instalando Docker (repositório oficial docker.com)..."
     case "$PKG_MANAGER" in
         apt)
-            local deb="/tmp/google-chrome-stable_current_amd64.deb"
-            wget -q -O "$deb" "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-            apt-get install -y "$deb"
-            rm -f "$deb"
+            apt-get update
+            apt-get install -y ca-certificates curl gnupg
+            install -m 0755 -d /etc/apt/keyrings
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            chmod a+r /etc/apt/keyrings/docker.asc
+            local codename
+            codename="$(. /etc/os-release && echo "$VERSION_CODENAME")"
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $codename stable" \
+                > /etc/apt/sources.list.d/docker.list
+            apt-get update
+            apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
             ;;
         dnf)
-            cat > /etc/yum.repos.d/google-chrome.repo <<'REPO'
-[google-chrome]
-name=google-chrome
-baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64
-enabled=1
-gpgcheck=1
-gpgkey=https://dl.google.com/linux/linux_signing_key.pub
-REPO
-            dnf install -y google-chrome-stable
-            ;;
-        pacman)
-            log "Chrome não está nos repositórios oficiais do Arch (só via AUR, que não é oficial). Pulando." "WARN"
-            return
+            # Oracle Linux não tem repo próprio do Docker CE - o próprio Docker recomenda
+            # usar o repo do CentOS, que é compatível (RHEL-based).
+            dnf -y install dnf-plugins-core
+            dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+            dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
             ;;
         *)
-            log "Gerenciador de pacotes não reconhecido; pulando Chrome." "WARN"
+            log "Gerenciador de pacotes não suportado para instalação do Docker (só apt/dnf)." "ERROR"
             return
             ;;
     esac
-    log "Google Chrome instalado." "OK"
-}
 
-install_vlc() {
-    log "Instalando VLC..."
-    case "$PKG_MANAGER" in
-        apt) apt-get install -y vlc ;;
-        dnf)
-            ensure_rpmfusion
-            dnf install -y vlc
-            ;;
-        pacman) pacman -S --noconfirm vlc ;;
-        *) log "Gerenciador de pacotes não reconhecido; pulando VLC." "WARN"; return ;;
-    esac
-    log "VLC instalado." "OK"
+    systemctl enable --now docker
+    log "Docker instalado e habilitado (docker --version / docker compose version)." "OK"
+    log "Se quiser rodar docker sem sudo, adicione seu usuário ao grupo 'docker' manualmente (usermod -aG docker <usuario>) - isso equivale a acesso root, então não faço isso automaticamente." "WARN"
 }
 
 install_generic_package() {
-    # $1 = nome amigável, $2 = pacote(s) apt, $3 = pacote(s) dnf, $4 = pacote(s) pacman
-    local name="$1" apt_pkg="$2" dnf_pkg="$3" pacman_pkg="$4"
+    # $1 = nome amigável, $2 = pacote(s) apt, $3 = pacote(s) dnf
+    local name="$1" apt_pkg="$2" dnf_pkg="$3"
     local pkg=""
 
     case "$PKG_MANAGER" in
         apt) pkg="$apt_pkg" ;;
         dnf) pkg="$dnf_pkg" ;;
-        pacman) pkg="$pacman_pkg" ;;
     esac
 
     if [ -z "$pkg" ] || [ "$pkg" = "--" ]; then
@@ -78,31 +57,31 @@ install_generic_package() {
         return
     fi
 
-    if [ "$PKG_MANAGER" = "dnf" ]; then
-        ensure_rpmfusion
-    fi
-
     log "Instalando $name ($pkg)..."
     case "$PKG_MANAGER" in
         apt) apt-get install -y $pkg ;;
         dnf) dnf install -y $pkg ;;
-        pacman) pacman -S --noconfirm $pkg ;;
         *) log "Gerenciador de pacotes não reconhecido; pulando $name." "WARN"; return ;;
     esac
     log "$name instalado." "OK"
 }
 
-invoke_software_install() {
-    if [ "$INSTALL_CHROME" = "true" ]; then
-        install_google_chrome
-    fi
-
-    install_vlc
-
+invoke_basic_tools_install() {
     for entry in "${SOFTWARE_LIST[@]}"; do
-        IFS='|' read -r name apt_pkg dnf_pkg pacman_pkg <<< "$entry"
-        install_generic_package "$name" "$apt_pkg" "$dnf_pkg" "$pacman_pkg"
+        IFS='|' read -r name apt_pkg dnf_pkg <<< "$entry"
+        install_generic_package "$name" "$apt_pkg" "$dnf_pkg"
     done
 
-    log "Instalação de programas básicos concluída." "OK"
+    if systemctl list-unit-files 2>/dev/null | grep -q '^vmtoolsd\.service'; then
+        log "Habilitando serviço open-vm-tools (vmtoolsd)..."
+        systemctl enable --now vmtoolsd
+    fi
+
+    log "Instalação de ferramentas básicas concluída." "OK"
+}
+
+invoke_docker_install() {
+    if [ "$INSTALL_DOCKER" = "true" ]; then
+        install_docker
+    fi
 }
