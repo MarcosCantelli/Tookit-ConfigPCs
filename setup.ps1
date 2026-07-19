@@ -12,7 +12,6 @@ Initialize-Logging -RootPath $RootPath
 
 . (Join-Path $RootPath "modules\Drivers.ps1")
 . (Join-Path $RootPath "modules\Software.ps1")
-. (Join-Path $RootPath "modules\Storage.ps1")
 . (Join-Path $RootPath "modules\Office.ps1")
 . (Join-Path $RootPath "modules\Activation.ps1")
 
@@ -23,7 +22,7 @@ function Show-Menu {
     Write-Host "=========================================================" -ForegroundColor Cyan
     Write-Host " 1) Atualizar drivers (utilitário oficial do fabricante)"
     Write-Host " 2) Instalar programas básicos (Chrome, Acrobat, WinRAR, VLC)"
-    Write-Host " 3) Instalar Office (2007 / 2016 / 365)"
+    Write-Host " 3) Instalar Microsoft 365 Apps (direto da Microsoft)"
     Write-Host " 4) Ativar Windows"
     Write-Host " 0) Executar tudo (1 -> 2 -> 3 -> 4)"
     Write-Host " Q) Sair"

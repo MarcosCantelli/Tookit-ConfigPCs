@@ -1,9 +1,4 @@
 {
-  "storage": {
-    "sharePath": "\\\\SEUSERVIDOR\\Softwares",
-    "office2007Zip": "Office2007.zip",
-    "office2016Zip": "Office2016.zip"
-  },
   "office365": {
     "odtDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_ODT_https://www.microsoft.com/en-us/download/details.aspx?id=49117>",
     "productId": "O365ProPlusRetail",
