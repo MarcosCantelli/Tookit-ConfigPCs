@@ -1,0 +1,3 @@
+# Scripts bash precisam de LF de verdade (CRLF quebra o shebang e os comandos no Linux),
+# independente do core.autocrlf configurado em cada máquina Windows que mexer no repositório.
+*.sh text eol=lf

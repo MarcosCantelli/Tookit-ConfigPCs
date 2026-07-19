@@ -7,6 +7,9 @@ instalação do Microsoft 365 Apps e ativação do Windows.
 > Esta é a versão **template/pública** do projeto: não depende de nenhum storage nem
 > credencial privada. Tudo aqui usa apenas fontes oficiais (winget, sites dos próprios
 > fabricantes, CDN da Microsoft).
+>
+> Tem um equivalente para Linux em [`linux/`](linux/) (atualização de pacotes/drivers e
+> instalação de programas básicos via repositórios oficiais da distro).
 
 ## Estrutura
 

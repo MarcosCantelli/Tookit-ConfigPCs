@@ -69,6 +69,24 @@ function Get-Manufacturer {
     }
 }
 
+function Get-SerialNumber {
+    $serial = (Get-CimInstance -ClassName Win32_BIOS).SerialNumber
+    if (-not $serial) { return "Desconhecido" }
+    return $serial.Trim()
+}
+
+function Invoke-OfficialDownload {
+    param(
+        [Parameter(Mandatory = $true)][string]$Uri,
+        [Parameter(Mandatory = $true)][string]$OutFile
+    )
+
+    # Alguns CDNs de fabricante (ex: dl.dell.com) retornam 403 sem um
+    # User-Agent de navegador - o padrão do Invoke-WebRequest é bloqueado.
+    $browserUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+    Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing -UserAgent $browserUserAgent
+}
+
 function Test-Winget {
     $winget = Get-Command winget.exe -ErrorAction SilentlyContinue
     if (-not $winget) {

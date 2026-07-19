@@ -1,21 +1,23 @@
 {
   "office365": {
-    "odtDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_ODT_https://www.microsoft.com/en-us/download/details.aspx?id=49117>",
+    "_comment": "Link verificado (HTTP 200) em 2026-07-19. Versionado - se parar de funcionar, pegue o atual em https://www.microsoft.com/en-us/download/details.aspx?id=49117",
+    "odtDownloadUrl": "https://download.microsoft.com/download/6c1eeb25-cf8b-41d9-8d0d-cc1dbc032140/officedeploymenttool_20131-20090.exe",
     "productId": "O365ProPlusRetail",
     "language": "pt-br",
     "channel": "Current"
   },
   "drivers": {
     "dell": {
-      "_comment": "Usado só se o winget estiver indisponível/falhar. Link versionado, pegue o atual em https://www.dell.com/support/kbdoc/en-us/000177325/dell-command-update",
-      "dcuDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_DELL_COMMAND_UPDATE>"
+      "_comment": "Link verificado (HTTP 200, precisa de User-Agent de navegador) em 2026-07-19. Versionado - se parar de funcionar, pegue o atual em https://www.dell.com/support/kbdoc/en-us/000177325/dell-command-update",
+      "dcuDownloadUrl": "https://dl.dell.com/FOLDER14424601M/1/Dell-Command-Update-Windows-Universal-Application_FGK9X_WIN64_5.7.0_A00.EXE"
     },
     "lenovo": {
-      "_comment": "Usado só se o winget estiver indisponível/falhar. Link versionado, pegue o atual em https://support.lenovo.com/us/en/downloads/ds012808",
-      "suDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_LENOVO_SYSTEM_UPDATE>"
+      "_comment": "Link verificado (HTTP 200) em 2026-07-19. Versionado - se parar de funcionar, pegue o atual em https://support.lenovo.com/us/en/downloads/ds012808",
+      "suDownloadUrl": "https://download.lenovo.com/pccbbs/thinkvantage_en/system_update_5.08.03.59.exe"
     },
     "hp": {
-      "hpiaDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_HPIA_https://ftp.hp.com/pub/caps-softpaq/cmit/HPIA.html>"
+      "_comment": "Link verificado (HTTP 200) em 2026-07-19. Versionado - se parar de funcionar, pegue o atual em https://ftp.hp.com/pub/caps-softpaq/cmit/HPIA.html",
+      "hpiaDownloadUrl": "https://hpia.hpcloud.hp.com/downloads/hpia/hp-hpia-5.3.6.exe"
     }
   },
   "software": [

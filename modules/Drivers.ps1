@@ -17,7 +17,7 @@ function Install-DellCommandUpdateDirect {
     $installer = Join-Path $workDir "dcu-installer.exe"
 
     Write-Log "Baixando Dell Command | Update de $url ..."
-    Invoke-WebRequest -Uri $url -OutFile $installer -UseBasicParsing
+    Invoke-OfficialDownload -Uri $url -OutFile $installer
 
     Write-Log "Instalando Dell Command | Update (silencioso)..."
     Start-Process -FilePath $installer -ArgumentList "/s" -Wait -NoNewWindow
@@ -74,7 +74,7 @@ function Install-LenovoSystemUpdateDirect {
     $installer = Join-Path $workDir "su-installer.exe"
 
     Write-Log "Baixando Lenovo System Update de $url ..."
-    Invoke-WebRequest -Uri $url -OutFile $installer -UseBasicParsing
+    Invoke-OfficialDownload -Uri $url -OutFile $installer
 
     Write-Log "Instalando Lenovo System Update (silencioso)..."
     Start-Process -FilePath $installer -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART" -Wait -NoNewWindow
@@ -133,7 +133,7 @@ function Invoke-HPDriverUpdate {
     $installer = Join-Path $workDir "hpia-installer.exe"
 
     Write-Log "Baixando HP Image Assistant de $hpiaUrl ..."
-    Invoke-WebRequest -Uri $hpiaUrl -OutFile $installer -UseBasicParsing
+    Invoke-OfficialDownload -Uri $hpiaUrl -OutFile $installer
 
     Write-Log "Extraindo HP Image Assistant..."
     Start-Process -FilePath $installer -ArgumentList "/s", "/e", "/f", $workDir -Wait -NoNewWindow

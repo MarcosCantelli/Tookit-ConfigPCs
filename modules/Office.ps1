@@ -19,7 +19,7 @@ function Invoke-Office365Install {
     $odtInstaller = Join-Path $workDir "odtsetup.exe"
 
     Write-Log "Baixando Office Deployment Tool (oficial Microsoft)..."
-    Invoke-WebRequest -Uri $odtUrl -OutFile $odtInstaller -UseBasicParsing
+    Invoke-OfficialDownload -Uri $odtUrl -OutFile $odtInstaller
 
     Write-Log "Extraindo Office Deployment Tool..."
     Start-Process -FilePath $odtInstaller -ArgumentList "/quiet", "/extract:$workDir" -Wait -NoNewWindow

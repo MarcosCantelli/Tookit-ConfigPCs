@@ -9,6 +9,7 @@ $RootPath = $PSScriptRoot
 
 Assert-Admin -ScriptPath $MyInvocation.MyCommand.Path
 Initialize-Logging -RootPath $RootPath
+Write-Log "Fabricante: $(Get-Manufacturer) | Número de série: $(Get-SerialNumber)"
 
 . (Join-Path $RootPath "modules\Drivers.ps1")
 . (Join-Path $RootPath "modules\Software.ps1")
