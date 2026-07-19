@@ -1,0 +1,32 @@
+{
+  "storage": {
+    "sharePath": "\\\\SEUSERVIDOR\\Softwares",
+    "office2007Zip": "Office2007.zip",
+    "office2016Zip": "Office2016.zip"
+  },
+  "office365": {
+    "odtDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_ODT_https://www.microsoft.com/en-us/download/details.aspx?id=49117>",
+    "productId": "O365ProPlusRetail",
+    "language": "pt-br",
+    "channel": "Current"
+  },
+  "drivers": {
+    "dell": {
+      "_comment": "Usado só se o winget estiver indisponível/falhar. Link versionado, pegue o atual em https://www.dell.com/support/kbdoc/en-us/000177325/dell-command-update",
+      "dcuDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_DELL_COMMAND_UPDATE>"
+    },
+    "lenovo": {
+      "_comment": "Usado só se o winget estiver indisponível/falhar. Link versionado, pegue o atual em https://support.lenovo.com/us/en/downloads/ds012808",
+      "suDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_LENOVO_SYSTEM_UPDATE>"
+    },
+    "hp": {
+      "hpiaDownloadUrl": "<COLOQUE_AQUI_O_LINK_ATUAL_DO_HPIA_https://ftp.hp.com/pub/caps-softpaq/cmit/HPIA.html>"
+    }
+  },
+  "software": [
+    { "name": "Google Chrome", "wingetId": "Google.Chrome" },
+    { "name": "Adobe Acrobat Reader", "wingetId": "Adobe.Acrobat.Reader.64-bit" },
+    { "name": "WinRAR", "wingetId": "RARLab.WinRAR" },
+    { "name": "VLC", "wingetId": "VideoLAN.VLC" }
+  ]
+}
