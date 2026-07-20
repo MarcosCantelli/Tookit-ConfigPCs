@@ -14,6 +14,7 @@ instalação do Microsoft 365 Apps e ativação do Windows.
 ## Estrutura
 
 ```
+Iniciar.bat             # atalho - dois cliques já roda com a execution policy certa
 setup.ps1              # entrypoint - rode como administrador
 config/config.json      # dados do Office 365 / ODT, links oficiais de fallback, lista de programas
 modules/                 # um arquivo por área (Drivers, Software, Office, Activation)
@@ -40,6 +41,12 @@ instalação — não há seleção de chave nem edição aqui). **Nunca adicion
 licenciamento via servidor não autorizado.
 
 ## Uso (na máquina do cliente, após instalar o Windows)
+
+Dá dois cliques em **`Iniciar.bat`** — ele já chama o PowerShell com o `-ExecutionPolicy
+Bypass` certo, sem precisar decorar comando nenhum. Isso não muda nenhuma configuração
+permanente do Windows, vale só pra aquele processo.
+
+Se preferir rodar direto pelo terminal:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File setup.ps1
