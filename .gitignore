@@ -1,2 +1,5 @@
+config/aes.key
+config/storage_credential.xml
 logs/
 linux/logs/
+linux-dev/logs/

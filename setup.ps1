@@ -23,6 +23,7 @@ Write-Log "Fabricante: $(Get-Manufacturer) | Número de série: $(Get-SerialNumb
 . (Join-Path $RootPath "modules\Software.ps1")
 . (Join-Path $RootPath "modules\Office.ps1")
 . (Join-Path $RootPath "modules\Activation.ps1")
+. (Join-Path $RootPath "modules\DevKit.ps1")
 
 function Show-Menu {
     Write-Host ""
@@ -33,7 +34,8 @@ function Show-Menu {
     Write-Host " 2) Instalar programas básicos (Chrome, Acrobat, WinRAR, VLC)"
     Write-Host " 3) Instalar Microsoft 365 Apps (direto da Microsoft)"
     Write-Host " 4) Ativar Windows"
-    Write-Host " 0) Executar tudo (1 -> 2 -> 3 -> 4)"
+    Write-Host " 5) Dev Kit (Git, VSCode, JDK, Maven, Node, Python, WSL, MobaXterm, VS2026)"
+    Write-Host " 0) Executar tudo (1 -> 2 -> 3 -> 4) [Dev Kit fica de fora, é sob demanda]"
     Write-Host " Q) Sair"
     Write-Host "=========================================================" -ForegroundColor Cyan
 }
@@ -64,6 +66,7 @@ do {
         "2" { Invoke-SoftwareInstall -Config $config }
         "3" { Invoke-OfficeInstall -RootPath $RootPath -Config $config }
         "4" { Invoke-WindowsActivation -RootPath $RootPath }
+        "5" { Invoke-DevKitInstall -Config $config }
         "0" { Invoke-All -Config $config }
         "q" { Write-Log "Encerrando." }
         "Q" { Write-Log "Encerrando." }

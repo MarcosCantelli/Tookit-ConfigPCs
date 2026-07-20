@@ -25,5 +25,33 @@
     { "name": "Adobe Acrobat Reader", "wingetId": "Adobe.Acrobat.Reader.64-bit" },
     { "name": "WinRAR", "wingetId": "RARLab.WinRAR" },
     { "name": "VLC", "wingetId": "VideoLAN.VLC" }
-  ]
+  ],
+  "devkit": {
+    "jdk": {
+      "_comment": "JDK 21.0.11 (LTS) da Oracle - versão pinada conforme o ambiente em uso. Link do arquivo do archive.oracle.com é fixo por versão (não muda), verificado em 2026-07-19.",
+      "windowsMsiUrl": "https://download.oracle.com/java/21/archive/jdk-21.0.11_windows-x64_bin.msi",
+      "linuxRpmUrl": "https://download.oracle.com/java/21/archive/jdk-21.0.11_linux-x64_bin.rpm",
+      "linuxTarGzUrl": "https://download.oracle.com/java/21/archive/jdk-21.0.11_linux-x64_bin.tar.gz"
+    },
+    "maven": {
+      "_comment": "Verificado em 2026-07-19. Se quiser atualizar, pegue a versão mais recente em https://maven.apache.org/download.cgi",
+      "version": "3.9.16",
+      "windowsZipUrl": "https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.zip",
+      "linuxTarGzUrl": "https://dlcdn.apache.org/maven/maven-3/3.9.16/binaries/apache-maven-3.9.16-bin.tar.gz"
+    },
+    "python": {
+      "wingetId": "Python.Python.3.14"
+    },
+    "mobaXterm": {
+      "_comment": "Link versionado (build 26.4) verificado em 2026-07-19. Pegue o atual em https://mobaxterm.mobatek.net/download-home-edition.html - é a versão instalável (não a portable).",
+      "installerZipUrl": "https://download.mobatek.net/2642026060332702/MobaXterm_Installer_v26.4.zip"
+    },
+    "visualStudio2026": {
+      "wingetId": "Microsoft.VisualStudio.Community"
+    },
+    "wsl": {
+      "_comment": "Único nome de distro Oracle Linux com suporte a 'wsl --install -d' direto. Depois de instalado, roda 'dnf -y update' pra ficar na versão mais atual.",
+      "distroName": "OracleLinux_9_1"
+    }
+  }
 }

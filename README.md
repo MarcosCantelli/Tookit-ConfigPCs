@@ -10,6 +10,10 @@ instalação do Microsoft 365 Apps e ativação do Windows.
 >
 > Tem um equivalente para Linux em [`linux/`](linux/) (atualização de pacotes/drivers e
 > instalação de programas básicos via repositórios oficiais da distro).
+>
+> Kit de ferramentas de desenvolvimento (Git, VSCode, JDK, Maven, Node, Python, WSL,
+> MobaXterm, VS2026) é o menu **5) Dev Kit** deste script. O equivalente pra estação de
+> trabalho Linux está em [`linux-dev/`](linux-dev/) (separado do toolkit de servidor).
 
 ## Estrutura
 
@@ -59,7 +63,8 @@ O script se auto-eleva para administrador e mostra um menu:
 2) Instalar programas básicos (Chrome, Acrobat, WinRAR, VLC)
 3) Instalar Microsoft 365 Apps (direto da Microsoft)
 4) Ativar Windows
-0) Executar tudo
+5) Dev Kit (Git, VSCode, JDK, Maven, Node, Python, WSL, MobaXterm, VS2026)
+0) Executar tudo (Dev Kit fica de fora, é sob demanda)
 Q) Sair
 ```
 

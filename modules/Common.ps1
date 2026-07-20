@@ -75,18 +75,6 @@ function Get-SerialNumber {
     return $serial.Trim()
 }
 
-function Invoke-OfficialDownload {
-    param(
-        [Parameter(Mandatory = $true)][string]$Uri,
-        [Parameter(Mandatory = $true)][string]$OutFile
-    )
-
-    # Alguns CDNs de fabricante (ex: dl.dell.com) retornam 403 sem um
-    # User-Agent de navegador - o padrão do Invoke-WebRequest é bloqueado.
-    $browserUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
-    Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing -UserAgent $browserUserAgent
-}
-
 function Test-Winget {
     $winget = Get-Command winget.exe -ErrorAction SilentlyContinue
     if (-not $winget) {
@@ -118,6 +106,46 @@ function Install-WingetPackage {
         Write-Log "Falha ao instalar $Name (código $($proc.ExitCode)). Verifique o id do pacote no winget." "ERROR"
     }
     return $proc.ExitCode
+}
+
+function Invoke-OfficialDownload {
+    param(
+        [Parameter(Mandatory = $true)][string]$Uri,
+        [Parameter(Mandatory = $true)][string]$OutFile
+    )
+
+    # Alguns CDNs de fabricante (ex: dl.dell.com) retornam 403 sem um
+    # User-Agent de navegador - o padrão do Invoke-WebRequest é bloqueado.
+    $browserUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+    Invoke-WebRequest -Uri $Uri -OutFile $OutFile -UseBasicParsing -UserAgent $browserUserAgent
+}
+
+function Set-MachineEnvironmentVariable {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][string]$Value
+    )
+
+    [Environment]::SetEnvironmentVariable($Name, $Value, "Machine")
+    Set-Item -Path "Env:$Name" -Value $Value
+    Write-Log "Variável de ambiente $Name definida como '$Value' (sistema)."
+}
+
+function Add-ToMachinePath {
+    param([Parameter(Mandatory = $true)][string]$PathToAdd)
+
+    $currentPath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+    $entries = $currentPath -split ";" | Where-Object { $_ -ne "" }
+
+    if ($entries -contains $PathToAdd) {
+        Write-Log "PATH já contém '$PathToAdd'."
+        return
+    }
+
+    $newPath = ($entries + $PathToAdd) -join ";"
+    [Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
+    $env:Path = "$env:Path;$PathToAdd"
+    Write-Log "'$PathToAdd' adicionado ao PATH (sistema)."
 }
 
 function Get-ProjectConfig {
