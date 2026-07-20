@@ -16,8 +16,9 @@
       "suDownloadUrl": "https://download.lenovo.com/pccbbs/thinkvantage_en/system_update_5.08.03.59.exe"
     },
     "hp": {
-      "_comment": "Link verificado (HTTP 200) em 2026-07-19. Versionado - se parar de funcionar, pegue o atual em https://ftp.hp.com/pub/caps-softpaq/cmit/HPIA.html",
-      "hpiaDownloadUrl": "https://hpia.hpcloud.hp.com/downloads/hpia/hp-hpia-5.3.6.exe"
+      "_comment": "HP Image Assistant NÃO serve pra isso (é ferramenta de imaging/análise de TI, não atualiza drivers de uma máquina). supportAssistantUrl verificado (HTTP 200) em 2026-07-19 - pego direto do botão do site oficial (a URL fica escondida atrás de JS, veja pelo histórico de downloads do navegador se precisar renovar). supportSolutionsFrameworkUrl (CASLSetup.exe) também resolve e foi indicado por um usuário no fórum da HP como sendo o Framework certo, mas não tive como confirmar 100% sem testar numa máquina real - valide no primeiro teste.",
+      "supportSolutionsFrameworkUrl": "https://ftp.hp.com/pub/caps-softpaq/cmit/softpaq/CASLSetup.exe",
+      "supportAssistantUrl": "https://ftp.hp.com/pub/softpaq/sp173501-174000/sp173774.exe"
     }
   },
   "software": [
@@ -26,6 +27,11 @@
     { "name": "WinRAR", "wingetId": "RARLab.WinRAR" },
     { "name": "VLC", "wingetId": "VideoLAN.VLC" }
   ],
+  "norton": {
+    "_comment": "Sem winget e sem link público direto - a Norton só libera o link do instalador do trial depois de um cadastro grátis em https://us.norton.com/downloads. Faça isso uma vez, pegue o link e cole abaixo. O cliente ativa o trial depois logando na conta Norton.",
+    "installTrial": true,
+    "trialInstallerUrl": "<COLOQUE_AQUI_O_LINK_DO_TRIAL_APOS_CADASTRO_EM_us.norton.com/downloads>"
+  },
   "devkit": {
     "jdk": {
       "_comment": "JDK 21.0.11 (LTS) da Oracle - versão pinada conforme o ambiente em uso. Link do arquivo do archive.oracle.com é fixo por versão (não muda), verificado em 2026-07-19.",

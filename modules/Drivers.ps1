@@ -121,41 +121,35 @@ function Invoke-HPDriverUpdate {
 
     Write-Log "Fabricante detectado: HP"
 
-    $hpiaUrl = $Config.drivers.hp.hpiaDownloadUrl
-    if (-not $hpiaUrl -or $hpiaUrl -like "*<*>*") {
-        Write-Log "URL do HP Image Assistant não configurada em config.json (drivers.hp.hpiaDownloadUrl)." "ERROR"
-        Write-Log "Pegue o link mais recente em https://ftp.hp.com/pub/caps-softpaq/cmit/HPIA.html (versão muda com frequência)." "WARN"
+    # HP Image Assistant (HPIA) NÃO é a ferramenta certa aqui - é voltada pra análise/imaging
+    # de TI em massa, não pra "atualizar os drivers dessa máquina agora". A ferramenta oficial
+    # da HP pra isso é o HP Support Assistant (que depende do HP Support Solutions Framework).
+    $frameworkUrl = $Config.drivers.hp.supportSolutionsFrameworkUrl
+    $hpsaUrl = $Config.drivers.hp.supportAssistantUrl
+
+    if (-not $frameworkUrl -or $frameworkUrl -like "*<*>*" -or -not $hpsaUrl -or $hpsaUrl -like "*<*>*") {
+        Write-Log "config.json -> drivers.hp.supportSolutionsFrameworkUrl / supportAssistantUrl não configurados." "ERROR"
+        Write-Log "Pegue os links atuais em https://support.hp.com/us-en/help/hp-support-assistant" "WARN"
         return
     }
 
-    $workDir = Join-Path $env:TEMP "HPIA"
+    $workDir = Join-Path $env:TEMP "HPSA"
     New-Item -ItemType Directory -Path $workDir -Force | Out-Null
-    $installer = Join-Path $workDir "hpia-installer.exe"
 
-    Write-Log "Baixando HP Image Assistant de $hpiaUrl ..."
-    Invoke-OfficialDownload -Uri $hpiaUrl -OutFile $installer
+    $frameworkInstaller = Join-Path $workDir "hp-framework.msi"
+    Write-Log "Baixando HP Support Solutions Framework..."
+    Invoke-OfficialDownload -Uri $frameworkUrl -OutFile $frameworkInstaller
+    Write-Log "Instalando HP Support Solutions Framework (silencioso)..."
+    Start-Process -FilePath "msiexec.exe" -ArgumentList "/i", "`"$frameworkInstaller`"", "/qn", "/norestart" -Wait -NoNewWindow
 
-    Write-Log "Extraindo HP Image Assistant..."
-    Start-Process -FilePath $installer -ArgumentList "/s", "/e", "/f", $workDir -Wait -NoNewWindow
+    $hpsaInstaller = Join-Path $workDir "hp-support-assistant.exe"
+    Write-Log "Baixando HP Support Assistant..."
+    Invoke-OfficialDownload -Uri $hpsaUrl -OutFile $hpsaInstaller
+    Write-Log "Instalando HP Support Assistant (silencioso)..."
+    Start-Process -FilePath $hpsaInstaller -ArgumentList "/s", "/v/qn" -Wait -NoNewWindow
 
-    $hpia = Get-ChildItem -Path $workDir -Filter "HPImageAssistant.exe" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-    if (-not $hpia) {
-        Write-Log "HPImageAssistant.exe não encontrado após extração em $workDir." "ERROR"
-        return
-    }
-
-    $reportFolder = Join-Path $workDir "Report"
-    Write-Log "Rodando HP Image Assistant (Analyze + Install, silencioso)..."
-    Start-Process -FilePath $hpia.FullName -ArgumentList @(
-        "/Operation:Analyze",
-        "/Action:Install",
-        "/Category:Drivers,Firmware",
-        "/Selection:All",
-        "/Silent",
-        "/ReportFolder:$reportFolder"
-    ) -Wait -NoNewWindow
-
-    Write-Log "HP Image Assistant finalizado. Relatório em $reportFolder. Reinicie a máquina quando possível." "OK"
+    Write-Log "HP Support Assistant instalado." "OK"
+    Write-Log "Diferente do Dell Command/Lenovo System Update, o HP Support Assistant não tem CLI confiável pra 'escanear e instalar agora' - ele roda em segundo plano/bandeja e verifica sozinho. Pode ser necessário abrir ele uma vez pra disparar a primeira checagem." "WARN"
 }
 
 function Invoke-DriverUpdate {
