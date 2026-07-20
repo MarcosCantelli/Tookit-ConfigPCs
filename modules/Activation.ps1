@@ -1,4 +1,4 @@
-# Activation.ps1
+﻿# Activation.ps1
 # Ativação de licença OEM vinculada à BIOS/firmware.
 #
 # A edição do Windows já vem certa da própria instalação (o técnico usa a ISO/edição correta),

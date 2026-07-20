@@ -1,4 +1,4 @@
-# Drivers.ps1
+﻿# Drivers.ps1
 # Atualização de drivers usando SOMENTE o utilitário oficial de cada fabricante.
 # Nenhum download de driver "solto"/terceiro é feito aqui — cada fabricante decide o que instalar.
 

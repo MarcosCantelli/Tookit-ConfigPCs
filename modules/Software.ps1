@@ -1,4 +1,4 @@
-# Software.ps1
+﻿# Software.ps1
 # Instalação dos programas básicos do dia a dia via winget (fonte oficial).
 # A lista de programas vem de config.json -> "software" (adicionar/remover programas ali, sem mexer no código).
 

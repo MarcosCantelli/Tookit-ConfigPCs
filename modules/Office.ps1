@@ -1,4 +1,4 @@
-# Office.ps1
+﻿# Office.ps1
 # Instalação do Microsoft 365 Apps via Office Deployment Tool oficial da Microsoft (Click-to-Run).
 # Ativação por conta Microsoft 365 fica por conta do cliente, depois da instalação.
 

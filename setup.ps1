@@ -1,7 +1,15 @@
-# setup.ps1
+﻿# setup.ps1
 # Entrypoint do toolkit de pós-formatação. Rodar como administrador (o script se auto-eleva).
 #
 #   powershell -ExecutionPolicy Bypass -File setup.ps1
+
+try {
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    $OutputEncoding = [System.Text.Encoding]::UTF8
+}
+catch {
+    # Terminal antigo sem suporte a essa troca - segue sem, os .ps1 com BOM já resolvem a maior parte.
+}
 
 $RootPath = $PSScriptRoot
 

@@ -1,4 +1,4 @@
-# Common.ps1
+﻿# Common.ps1
 # Funções compartilhadas: elevação de admin, log, detecção de fabricante, checagem do winget.
 
 $script:LogPath = $null
