@@ -14,6 +14,12 @@ instalação do Microsoft 365 Apps e ativação do Windows.
 > Kit de ferramentas de desenvolvimento (Git, VSCode, JDK, Maven, Node, Python, WSL,
 > MobaXterm, VS2026) é o menu **5) Dev Kit** deste script. O equivalente pra estação de
 > trabalho Linux está em [`linux-dev/`](linux-dev/) (separado do toolkit de servidor).
+>
+> Dá pra rodar tudo isso numa máquina remota via SSH, sem levar pendrive — ver
+> [`remote/`](remote/) (funciona partindo de um controlador Windows ou Linux, mirando um
+> alvo Windows ou Linux). No Windows, o alvo precisa do OpenSSH Server habilitado antes —
+> ver [`windows-unattend/`](windows-unattend/) (automático na instalação) ou
+> [`tools/Enable-RemoteSsh.ps1`](tools/Enable-RemoteSsh.ps1) (manual).
 
 ## Estrutura
 
@@ -33,9 +39,11 @@ Editar `config/config.json`:
 - `drivers.dell.dcuDownloadUrl` / `drivers.lenovo.suDownloadUrl`: **opcionais** — só são usados
   como fallback se o `winget` estiver indisponível ou a instalação via winget falhar (o caminho
   normal é `winget install Dell.CommandUpdate` / `Lenovo.SystemUpdate`, que já é automático).
-- `drivers.hp.hpiaDownloadUrl`: link atual do HP Image Assistant — este é usado sempre, já que
-  não há um id de winget confiável para o HPIA
-  (https://ftp.hp.com/pub/caps-softpaq/cmit/HPIA.html — também muda de versão em versão).
+- `drivers.hp.supportSolutionsFrameworkUrl` / `supportAssistantUrl`: links do HP Support
+  Solutions Framework + HP Support Assistant (o HP Image Assistant NÃO serve pra isso — é
+  ferramenta de imaging/análise de TI, não atualiza drivers de uma máquina). Não há id de
+  winget confiável pra nenhum dos dois; o botão de download do site da HP esconde a URL
+  atrás de JS, pegue uma nova pelo histórico de downloads do navegador se precisar renovar.
 - `software`: lista de programas (id do winget) a instalar. Adicionar/remover programas = só editar aqui.
 
 **Ativação do Windows** (`modules\Activation.ps1`) só repete o `slmgr /ato` nativo do Windows,
@@ -73,7 +81,7 @@ Logs de cada execução ficam em `logs\setup_<data>.log`.
 ## Observações importantes
 
 - **Drivers**: só usa o utilitário oficial do fabricante detectado (Dell Command | Update,
-  Lenovo System Update, HP Image Assistant). Se a máquina não for de nenhum desses três, o
+  Lenovo System Update, HP Support Assistant). Se a máquina não for de nenhum desses três, o
   script avisa e não faz nada — sem fallback alternativo.
 - **Programas básicos**: instalados via `winget` (gerenciador oficial da Microsoft).
 - **Microsoft 365 Apps**: baixa direto da CDN oficial da Microsoft; o cliente precisa logar com
