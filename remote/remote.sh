@@ -27,6 +27,17 @@ fi
 
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+if [ -z "$KEY_PATH" ]; then
+    echo ""
+    echo "Como autenticar em ${USERNAME}@${TARGET_HOST} ?"
+    echo "  1) Senha (digitada na hora pelo próprio ssh/scp, nada fica gravado)"
+    echo "  2) Chave SSH"
+    read -rp "Escolha (1/2): " auth_choice
+    if [ "$auth_choice" = "2" ]; then
+        read -rp "Caminho da chave privada SSH: " KEY_PATH
+    fi
+fi
+
 SSH_OPTS=()
 if [ -n "$KEY_PATH" ]; then
     if [ ! -f "$KEY_PATH" ]; then

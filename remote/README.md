@@ -34,11 +34,26 @@ Linux, em qualquer combinação.
 
 ## Autenticação
 
-- **Sem chave** (usuário/senha): não passe `-KeyPath` / não passe o 4º argumento — o
-  próprio `ssh`/`scp` pergunta a senha na hora, interativamente. Nada fica gravado em
+Se você não passar `-KeyPath` (nem o 4º argumento no `.sh`), o script **pergunta na hora**
+se quer usar senha ou chave SSH:
+
+- **Senha**: o próprio `ssh`/`scp` pergunta a senha interativamente. Nada fica gravado em
   lugar nenhum.
-- **Com chave SSH**: passe `-KeyPath <caminho>` / o 4º argumento com o caminho da chave
-  privada.
+- **Chave SSH**: o script pergunta o caminho da chave privada.
+
+Se preferir pular a pergunta (ex: pra automatizar), já passe `-KeyPath <caminho>` / o 4º
+argumento direto.
+
+### Erro comum: "Permission denied (publickey)"
+
+Se a máquina remota estiver configurada pra **só aceitar chave** (`PasswordAuthentication
+no` no `sshd_config` - comum em servidores mais hardened), escolher "senha" nem chega a
+pedir a senha - o servidor recusa antes. Nesse caso: ou usa uma chave já autorizada
+(`authorized_keys` do usuário na máquina remota), ou habilita senha no servidor primeiro:
+```bash
+sudo sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sudo systemctl restart ssh
+```
 
 ## O que acontece por baixo dos panos
 

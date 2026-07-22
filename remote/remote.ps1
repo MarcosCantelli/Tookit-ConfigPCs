@@ -24,6 +24,17 @@ param(
 $ErrorActionPreference = "Stop"
 $RootPath = Split-Path -Parent $PSScriptRoot
 
+if (-not $KeyPath) {
+    Write-Host ""
+    Write-Host "Como autenticar em ${Username}@${TargetHost} ?"
+    Write-Host "  1) Senha (digitada na hora pelo próprio ssh/scp, nada fica gravado)"
+    Write-Host "  2) Chave SSH"
+    $authChoice = Read-Host "Escolha (1/2)"
+    if ($authChoice -eq "2") {
+        $KeyPath = Read-Host "Caminho da chave privada SSH"
+    }
+}
+
 $sshExtraArgs = @()
 if ($KeyPath) {
     if (-not (Test-Path $KeyPath)) {
